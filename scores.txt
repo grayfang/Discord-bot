@@ -1,0 +1,3 @@
+Gray: 3
+pierogi: 6
+gray2: 2
