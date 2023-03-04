@@ -3,7 +3,7 @@ import sys
 import foods
 import dice
 import scores
-from game_logic import play_game
+from game_logic import is_over, play_game
 
 MAX_RANGE = 1000
 intents = discord.Intents.default()
@@ -47,6 +47,7 @@ async def on_message(message):
         food = message.content
         foods.add_food(food)
         await message.channel.send(f'```Added {food} to the list```')
+        food.load_foods()
 
     elif message.content.lower().startswith('$reload'):
         foods.load_foods()
@@ -60,9 +61,11 @@ async def on_message(message):
             
 
 #edit to make sure game aint going
-    if message.content.lower() =='$stop':
-        await message.channel.send(f'Shutting down.')
+    if message.content.lower() =='$stop' and is_over() == True:
+        await message.channel.send(f'```Shutting down.```')
         sys.exit(0)
+    elif message.content.lower() =='$stop':
+        await message.channel.send(f'```There is currently a game going on, please wait.```')
     if message.content.lower().startswith('$start'):
         scores_dict = scores.get_scores()
         print(scores_dict)
@@ -74,4 +77,4 @@ async def on_message(message):
 
 
 #token here          
-client.run('')
+client.run('MTA3ODA4NDI5Njc2NzcwOTI5NA.GX7saT.uMotmj3eyhV0gVa0pTbIQCUr2y5vuPJtK3OJQM')

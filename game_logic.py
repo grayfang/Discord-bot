@@ -1,16 +1,21 @@
 import random
 import time
-import scores
 
 MAX_RANGE = 100
+gameover = True
+def is_over():
+    global gameover
+    return gameover
 
 async def play_game(message, client, scores):
     playing = True
+    global gameover 
     gameover = False
     winner = False
     currentRand = MAX_RANGE
     username = "empty"
     turnCount = 0
+    
 
     user1 = str(message.author).split('#')[0]
     user2 = ""
@@ -24,7 +29,11 @@ async def play_game(message, client, scores):
             message = await client.wait_for('message')
             #makes sure that the bot messages aren't being used
             if message.author == client.user:
-                continue            
+                continue    
+            #makes sure that other commands are ignored
+            if message.content.startswith('$'):
+                continue
+     
 
         
         # parses the username from the discord username
@@ -35,12 +44,14 @@ async def play_game(message, client, scores):
             scores[user2] = scores.get(user2, 0)
         # debug message
         # await message.channel.send(f'user1: {user1}\nname: {name[0]}\nturncount: {turnCount}')
-        if (turnCount%2 == 0) and (user1 != name[0]):
-            print("error")
+        if (turnCount % 2 == 0) and (user1 != name[0]):
+            # debug message
+            # print("error")
             await message.channel.send("```You can't play twice in a row!```")
             continue
-        elif((turnCount%2 == 1) and (user2 != name[0])):
-            print("error")
+        elif((turnCount % 2 == 1) and (user2 != name[0])):
+            # debug message
+            # print("error")
             await message.channel.send("```You can't play twice in a row!```")
             continue  
         # debug message to track the id/username of the user who sent the message
@@ -55,7 +66,7 @@ async def play_game(message, client, scores):
             print(turnCount)
 
             #logic for 
-            if turnCount%2 == 0:
+            if turnCount % 2 == 0:
                 winner = True
             else:
                 winner = False
